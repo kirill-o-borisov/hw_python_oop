@@ -10,7 +10,7 @@ class Calculator:
     def add_record(self, rec):  # Добавляем запись
         self.records.append(rec)
 
-    def get_today_stats(self):
+    def get_today_stats(self):  # Вывод за день
         now = dt.date.today()
         total_amount = 0
         for i in self.records:
@@ -18,7 +18,7 @@ class Calculator:
                 total_amount += i.amount
         return total_amount
 
-    def get_left(self):
+    def get_left(self):  # Получение остатка
         return (self.limit - self.get_today_stats())
 
     def get_week_stats(self):
@@ -32,13 +32,14 @@ class Calculator:
 
 
 class CashCalculator(Calculator):
+    USD_RATE = 75.00
+    EURO_RATE = 90.00
+
     def get_today_cash_remained(self, currency):
-        USD_RATE = 75.00
-        EURO_RATE = 90.00
         if currency == 'usd':
-            money_left = round(self.get_left() / USD_RATE, 2)
+            money_left = round(self.get_left() / self.USD_RATE, 2)
         elif currency == 'eur':
-            money_left = round(self.get_left() / EURO_RATE, 2)
+            money_left = round(self.get_left() / self.EURO_RATE, 2)
         if money_left > 0:
             return f'На сегодня осталось {money_left} {currency}'
         elif money_left == 0:
@@ -49,7 +50,7 @@ class CashCalculator(Calculator):
 
 class CaloriesCalculator(Calculator):
 
-    def get_today_calories_remained(self):
+    def get_calories_remained(self):
         colories_left = self.get_left()
         if colories_left > 0:
             return (f'Сегодня можно съесть что-нибудь ещё, '
