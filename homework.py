@@ -51,7 +51,7 @@ class CashCalculator(Calculator):
             return f'На сегодня осталось {money_left} {money_name}'
         elif money_left == 0:
             return 'Денег нет, держись'
-        return f'Денег нет, держись: твой долг {money_left} {money_name}'
+        return f'Денег нет, держись: твой долг - {abs(money_left)} {money_name}'
 
 
 class CaloriesCalculator(Calculator):
