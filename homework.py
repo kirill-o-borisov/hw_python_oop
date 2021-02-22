@@ -22,7 +22,7 @@ class Calculator:
         return (self.limit - self.get_today_stats())
 
     def get_week_stats(self):
-        now = dt.date.today().date()
+        now = dt.date.today()
         seven_days_ago = now - dt.timedelta(days=7)
         total_amount_week = 0
         for i in self.records:
@@ -32,20 +32,26 @@ class Calculator:
 
 
 class CashCalculator(Calculator):
+    RUB_RATE = 1.00
     USD_RATE = 75.00
     EURO_RATE = 90.00
 
     def get_today_cash_remained(self, currency):
-        if currency == 'usd':
-            money_left = round(self.get_left() / self.USD_RATE, 2)
-        elif currency == 'eur':
-            money_left = round(self.get_left() / self.EURO_RATE, 2)
+        dict_values = {
+            'rub': {'value': self.RUB_RATE,
+                    'name': 'руб'},
+            'usd': {'value': self.USD_RATE,
+                    'name': 'USD'},
+            'eur': {'value': self.EURO_RATE,
+                    'name': 'Euro'}
+        }
+        money_left = round(self.get_left() / dict_values[currency]['value'], 2)
+        money_name = dict_values[currency]['name']
         if money_left > 0:
-            return f'На сегодня осталось {money_left} {currency}'
+            return f'На сегодня осталось {money_left} {money_name}'
         elif money_left == 0:
             return 'Денег нет, держись'
-        else:
-            return f'Денег нет, держись: твой долг {money_left} {currency}'
+        return f'Денег нет, держись: твой долг {money_left} {money_name}'
 
 
 class CaloriesCalculator(Calculator):
