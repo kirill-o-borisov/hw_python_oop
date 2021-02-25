@@ -10,23 +10,21 @@ class Calculator:
     def add_record(self, rec):  # Добавляем запись
         self.records.append(rec)
 
-    def get_today_stats(self):  # Вывод за день
+    def get_today_stats(self):
         now = dt.date.today()
         total_amount = 0
-        for i in self.records:
-            if i.date == now:
-                total_amount += i.amount
+        total_amount += [i.amount for i in self.records if i.date == now]
         return total_amount
 
     def get_left(self):  # Получение остатка
-        return (self.limit - self.get_today_stats())
+        return self.limit - self.get_today_stats()
 
     def get_week_stats(self):
         now = dt.date.today()
         seven_days_ago = now - dt.timedelta(days=7)
         total_amount_week = 0
         for i in self.records:
-            if i.date <= now and i.date > seven_days_ago:
+            if seven_days_ago < i.date <= now:
                 total_amount_week += i.amount
         return total_amount_week  # За неделю
 
@@ -47,12 +45,13 @@ class CashCalculator(Calculator):
         }
         money_left = round(self.get_left() / dict_values[currency]['value'], 2)
         money_name = dict_values[currency]['name']
+        abs_money_left = abs(money_left)
         if money_left > 0:
             return f'На сегодня осталось {money_left} {money_name}'
         elif money_left == 0:
             return 'Денег нет, держись'
-        return (f'Денег нет, держись: '
-                f'твой долг - {abs(money_left)} {money_name}')
+        return ('Денег нет, держись: '
+                f'твой долг - {abs_money_left} {money_name}')
 
 
 class CaloriesCalculator(Calculator):
@@ -60,10 +59,9 @@ class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
         colories_left = self.get_left()
         if colories_left > 0:
-            return (f'Сегодня можно съесть что-нибудь ещё, '
+            return ('Сегодня можно съесть что-нибудь ещё, '
                     f'но с общей калорийностью не более {colories_left} кКал')
-        else:
-            return 'Хватит есть!'
+        return 'Хватит есть!'
 
 
 class Record:
