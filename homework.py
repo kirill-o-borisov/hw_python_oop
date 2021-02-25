@@ -13,7 +13,7 @@ class Calculator:
     def get_today_stats(self):
         now = dt.date.today()
         total_amount = 0
-        total_amount += [i.amount for i in self.records if i.date == now]
+        total_amount = sum([i.amount for i in self.records if i.date == now])
         return total_amount
 
     def get_left(self):  # Получение остатка
